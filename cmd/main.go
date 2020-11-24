@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"pili-apiserver/pkg/dao"
+	"pili-apiserver/pkg/handler"
 )
 
 func main() {
@@ -12,7 +12,7 @@ func main() {
 	// })
 	// router.Run()
 
-	dao := dao.SliceDao{}
-	dao.Init()
-	fmt.Println(dao.Get(1))
+	h := handler.Handler{}
+	h.Init()
+	fmt.Println(h.Get(1))
 }
