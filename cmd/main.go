@@ -1,18 +1,19 @@
 package main
 
 import (
-	"fmt"
 	"pili-apiserver/pkg/handler"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	// router := gin.Default()
-	// router.GET("/", func(c *gin.Context) {
-	// 	c.String(http.StatusOK, "test")
-	// })
-	// router.Run()
-
+	router := gin.Default()
 	h := handler.Handler{}
 	h.Init()
-	fmt.Println(h.Get(1))
+	router.GET("/role/:id", h.Get)
+	router.GET("/role", h.List)
+	router.POST("/role", h.Save)
+	router.PUT("/role/:id", h.Update)
+	router.DELETE("/role/:id", h.Delete)
+	router.Run()
 }

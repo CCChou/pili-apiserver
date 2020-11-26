@@ -1,8 +1,12 @@
 package handler
 
 import (
+	"net/http"
 	"pili-apiserver/pkg/dao"
 	"pili-apiserver/pkg/model"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
@@ -15,22 +19,56 @@ func (h *Handler) Init() {
 	h.dao = &sliceDao
 }
 
-func (h *Handler) Get(id int) (model.Character, error) {
-	return h.dao.Get(id)
+func (h *Handler) Get(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "")
+		return
+	}
+
+	role, err := h.dao.Get(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "")
+		return
+	}
+
+	c.JSON(http.StatusOK, role)
 }
 
-func (h *Handler) List() []model.Character {
-	return h.dao.List()
+func (h *Handler) List(c *gin.Context) {
+	roles := h.dao.List()
+	c.JSON(http.StatusOK, roles)
 }
 
-func (h *Handler) Save(characeter model.Character) {
-	h.dao.Save(characeter)
+func (h *Handler) Save(c *gin.Context) {
+	var role model.Character
+	if err := c.ShouldBindJSON(&role); err != nil {
+		c.JSON(http.StatusBadRequest, "")
+		return
+	}
+	h.dao.Save(role)
 }
 
-func (h *Handler) Update(character model.Character) error {
-	return h.dao.Update(character)
+func (h *Handler) Update(c *gin.Context) {
+	// id, err := strconv.Atoi(c.Param("id"))
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, "")
+	// 	return
+	// }
+
+	var role model.Character
+	if err := c.ShouldBindJSON(&role); err != nil {
+		c.JSON(http.StatusBadRequest, "")
+		return
+	}
+	h.dao.Update(role)
 }
 
-func (h *Handler) Delete(id int) error {
-	return h.dao.Delete(id)
+func (h *Handler) Delete(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "")
+		return
+	}
+	h.dao.Delete(id)
 }
