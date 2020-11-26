@@ -17,7 +17,8 @@ type Dao interface {
 }
 
 type SliceDao struct {
-	roles []model.Role
+	sequence int
+	roles    []model.Role
 }
 
 func (sd *SliceDao) Init() {
@@ -29,6 +30,14 @@ func (sd *SliceDao) Init() {
 
 	decoder := json.NewDecoder(jsonFile)
 	decoder.Decode(&sd.roles)
+
+	max := 0
+	for _, role := range sd.roles {
+		if max < role.ID {
+			max = role.ID
+		}
+	}
+	sd.sequence = max
 }
 
 func (sd *SliceDao) Get(id int) (model.Role, error) {
@@ -45,6 +54,11 @@ func (sd *SliceDao) List() []model.Role {
 }
 
 func (sd *SliceDao) Save(role model.Role) {
+	// sd.sequence++
+	// role.ID = sd.sequence
+	// for index := range role.Skills {
+	// 	role.Skills[index].ID = index + 1
+	// }
 	sd.roles = append(sd.roles, role)
 }
 

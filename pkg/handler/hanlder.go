@@ -28,7 +28,7 @@ func (h *Handler) Get(c *gin.Context) {
 
 	role, err := h.dao.Get(id)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, "")
+		c.JSON(http.StatusNotFound, "")
 		return
 	}
 
@@ -47,21 +47,29 @@ func (h *Handler) Save(c *gin.Context) {
 		return
 	}
 	h.dao.Save(role)
+	c.JSON(http.StatusOK, role)
 }
 
 func (h *Handler) Update(c *gin.Context) {
-	// id, err := strconv.Atoi(c.Param("id"))
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, "")
-	// 	return
-	// }
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "")
+		return
+	}
 
 	var role model.Role
 	if err := c.ShouldBindJSON(&role); err != nil {
 		c.JSON(http.StatusBadRequest, "")
 		return
 	}
+
+	if _, err := h.dao.Get(id); err != nil {
+		c.JSON(http.StatusNotFound, "")
+		return
+	}
+	role.ID = id
 	h.dao.Update(role)
+	c.JSON(http.StatusOK, role)
 }
 
 func (h *Handler) Delete(c *gin.Context) {
@@ -71,4 +79,5 @@ func (h *Handler) Delete(c *gin.Context) {
 		return
 	}
 	h.dao.Delete(id)
+	c.JSON(http.StatusNoContent, "")
 }
