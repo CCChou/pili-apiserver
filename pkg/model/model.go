@@ -1,6 +1,6 @@
 package model
 
-type Character struct {
+type Role struct {
 	ID      int     `json:"id"`
 	Name    string  `json:"name"`
 	Summary string  `json:"summary"`

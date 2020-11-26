@@ -9,60 +9,60 @@ import (
 
 type Dao interface {
 	Init()
-	Get(id int) (model.Character, error)
-	List() []model.Character
-	Save(character model.Character)
-	Update(character model.Character) error
+	Get(id int) (model.Role, error)
+	List() []model.Role
+	Save(role model.Role)
+	Update(role model.Role) error
 	Delete(id int) error
 }
 
 type SliceDao struct {
-	characters []model.Character
+	roles []model.Role
 }
 
 func (sd *SliceDao) Init() {
 	jsonFile, err := os.Open("docs/Homework/布袋戲資料.json")
 	if err != nil {
-		panic("Read characters data fails")
+		panic("Read roles data fails")
 	}
 	defer jsonFile.Close()
 
 	decoder := json.NewDecoder(jsonFile)
-	decoder.Decode(&sd.characters)
+	decoder.Decode(&sd.roles)
 }
 
-func (sd *SliceDao) Get(id int) (model.Character, error) {
-	for _, character := range sd.characters {
-		if character.ID == id {
-			return character, nil
+func (sd *SliceDao) Get(id int) (model.Role, error) {
+	for _, role := range sd.roles {
+		if role.ID == id {
+			return role, nil
 		}
 	}
-	return model.Character{}, errors.New("No such Character")
+	return model.Role{}, errors.New("No such role")
 }
 
-func (sd *SliceDao) List() []model.Character {
-	return sd.characters
+func (sd *SliceDao) List() []model.Role {
+	return sd.roles
 }
 
-func (sd *SliceDao) Save(character model.Character) {
-	sd.characters = append(sd.characters, character)
+func (sd *SliceDao) Save(role model.Role) {
+	sd.roles = append(sd.roles, role)
 }
 
-func (sd *SliceDao) Update(character model.Character) error {
-	for index, oldCharacter := range sd.characters {
-		if oldCharacter.ID == character.ID {
-			sd.characters[index] = character
+func (sd *SliceDao) Update(role model.Role) error {
+	for index, oldrole := range sd.roles {
+		if oldrole.ID == role.ID {
+			sd.roles[index] = role
 			return nil
 		}
 	}
-	return errors.New("No such Character")
+	return errors.New("No such role")
 }
 
 func (sd *SliceDao) Delete(id int) error {
-	for index, character := range sd.characters {
-		if character.ID == id {
-			sd.characters = append(sd.characters[:index], sd.characters[index+1:]...)
+	for index, role := range sd.roles {
+		if role.ID == id {
+			sd.roles = append(sd.roles[:index], sd.roles[index+1:]...)
 		}
 	}
-	return errors.New("No such Character")
+	return errors.New("No such role")
 }

@@ -41,7 +41,7 @@ func (h *Handler) List(c *gin.Context) {
 }
 
 func (h *Handler) Save(c *gin.Context) {
-	var role model.Character
+	var role model.Role
 	if err := c.ShouldBindJSON(&role); err != nil {
 		c.JSON(http.StatusBadRequest, "")
 		return
@@ -56,7 +56,7 @@ func (h *Handler) Update(c *gin.Context) {
 	// 	return
 	// }
 
-	var role model.Character
+	var role model.Role
 	if err := c.ShouldBindJSON(&role); err != nil {
 		c.JSON(http.StatusBadRequest, "")
 		return
