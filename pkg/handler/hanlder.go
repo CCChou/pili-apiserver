@@ -14,9 +14,9 @@ type Handler struct {
 }
 
 func (h *Handler) Init() {
-	sliceDao := dao.SliceDao{}
-	sliceDao.Init()
-	h.dao = &sliceDao
+	d := dao.MapDao{}
+	d.Init()
+	h.dao = &d
 }
 
 func (h *Handler) Get(c *gin.Context) {
